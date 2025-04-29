@@ -80,12 +80,11 @@ def retrieve_anime_information(anime_name: str):
         return None
     
     plot_section_id = __get_plot_section_id(page_id)
-    if not plot_section_id:
-        return None
+    plot_text_content = None
+    if plot_section_id:
+        plot_text_content = __get_section_information(page_id, plot_section_id)
     
     intro_text = __get_intro_text(page_id)
-    plot_text_content = __get_section_information(page_id, plot_section_id)
-
     anime_info = f"## Introduction\n{intro_text}"
     if plot_text_content:
         anime_info += f"\n\n## Plot\n{plot_text_content}"
