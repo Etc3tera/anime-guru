@@ -5,6 +5,8 @@ from dateutil import parser
 import pandas as pd
 import numpy as np
 
+from extract import retrieve_anime_information
+
 __hallucination_sampling_size = 20
 
 def check_self_knowledge(anime_name: str):
@@ -68,7 +70,10 @@ def check_self_knowledge(anime_name: str):
 def retrieval_self_knowledge(anime_name: str):
     return ''
             
-anime_name = "Love live school idol"
+# anime_name = "Love live school idol"
+print ("Hey there! I'm Anime Guru, and I'm here to give you a quick and fun summary of your favorite anime. Just type the name of the anime, and I'll take care of the rest!\n")
+
+anime_name = input("Name: ")
 
 print(f'Checking my knowledge on {anime_name}...')
 
@@ -91,4 +96,21 @@ if check_self_knowledge(anime_name):
     print(response.message.content)
 
 else:
-    print(f"Sorry, I don't know Anime name {anime_name}")
+    print("I didn't watch this, but let me review this for you...")
+    anime_info = retrieve_anime_information(anime_name)
+
+    prompt_template = f"""You are Anime Master.
+
+    Please summary below information of Anime "{anime_name}" to adverise newcomer:
+
+    {anime_info}
+    """   
+
+    response: ChatResponse = chat(model='llama3.2', messages=[
+        {
+            'role': 'user',
+            'content': prompt_template,
+        },
+        ])
+    print(response.message.content)
+    # print(f"Sorry, I don't know Anime name {anime_name}")
